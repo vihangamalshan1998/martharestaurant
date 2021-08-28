@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 Route::get('/', function () {
    //get and set the available main dishes
@@ -40,13 +41,29 @@ Route::get('/', function () {
                 ->where('foodType', '=', 'SIDE DISHES')
                 ->where('SallersCount', '=', $getSideDishSoldTime)
                 ->get();
-                
+
+    //get current date
+    $date = Carbon::now()->toDateString();
+
+    //retrive order details using current date
+    $getdailyreport = DB::table('Orders')
+                ->where('OrderDate', '=', $date )
+                ->get();
+    
+    //Get daily report total sell value
+    $Total = DB::table('Orders')
+     ->sum('TotalPrice');
 
     //return to index view data stored variables
     return view('index',['mainDishes'=> $getMainDishes,'sideDishes'=>$getSideDishes,'desserts'=>$getDesserts,
-    'famousMainMeal'=>$getMostFamousMainDish,'famousSideMeal'=>$getMostFamousSideDish]);
+    'famousMainMeal'=>$getMostFamousMainDish,'famousSideMeal'=>$getMostFamousSideDish,'dailyReport'=>$getdailyreport
+    ,'total'=>$Total]);
 
 
 });
 
+//route for add new foods for system
 Route::post('/saveFoods',\App\Http\Controllers\FoodController::class . '@storeData');
+
+//route for add new foods for system
+Route::post('/saveOrder',\App\Http\Controllers\OrderController::class . '@storeData');

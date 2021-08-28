@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     
@@ -10,6 +10,7 @@
                 font-family: 'Nunito', sans-serif;
             }
     </style>
+   
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,7 +40,8 @@
                       <a class="nav-item nav-link active text-light mr-3" href="{{url('/')}}">HOME</span></a>
                       <!-- model button -->
                       <a class="nav-item nav-link text-light mr-3" href="" data-toggle="modal" data-target="#exampleModal">ADD FOODS</a>
-                      <a class="nav-item nav-link text-light mr-3" href="#">ADD ORDER</a>
+                      <a class="nav-item nav-link text-light mr-3" href="" data-toggle="modal" data-target="#exampleModal2">ADD ORDER</a>
+                      <a class="nav-item nav-link text-light mr-3" href="" data-toggle="modal" data-target="#exampleModal3">DAILY REPORT</a>
                     </div>
                   </div>
               </nav>
@@ -58,7 +60,7 @@
             </div>
                 @foreach($famousMainMeal as $famousMainMeals)
                  
-                  <div class="card bg-info ml-5 mr-5">
+                  <div class="card bg-info ml-5 mr-5 mt-2 mb-2">
                     <h5 class="mt-2 mb-2">ID:- {{$famousMainMeals->id}}</h5>
                     <h5 class="mt-2 mb-2">NAME:- {{$famousMainMeals->foodName}}</h5>
                     <h5 class="mt-2 mb-2">PRICE:- {{$famousMainMeals->foodPrice}}</h5>
@@ -74,7 +76,7 @@
                    </div>
               </div>
                  @foreach($famousSideMeal as $famousSideMeals)
-                  <div class="card bg-info ml-5 mr-5">
+                  <div class="card bg-info ml-5 mr-5 mt-2 mb-2">
                     <h5 class="mt-2 mb-2">ID:- {{$famousSideMeals->id}}</h5>
                     <h5 class="mt-2 mb-2">NAME:- {{$famousSideMeals->foodName}}</h5>
                     <h5 class="mt-2 mb-2">PRICE:- {{$famousSideMeals->foodPrice}}</h5>
@@ -181,8 +183,8 @@
                   <input type="number" name="FoodPrice" class="form-control" id="exampleFormControlInput3" placeholder="FOOD PRICE" required>
                 </div>
                 <div class="justify-content-center text-center">
-                   <button type="submit" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   <button type="submit" class="btn btn-warning">ADD FOOD</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </form>
           </div>
@@ -191,7 +193,135 @@
     </div>
     <!-- Modal End -->
 
+    <!-- Modal for add Order-->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ADD NEW ORDER</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <form method="post" action="/saveOrder">
+             {{csrf_field()}}
+             <div class="form-group">
+                  <label for="exampleFormControlInput1">WITH DESSERT</label><br>
+                  <div class="row text-center">
+                    <div class="col-md-3">
+                        Yes<input type="radio" id="Yes" name="answer" checked="checked" value="yes"/> <br><br>
+                    </div>
+                    <div class="col-md-3">
+                        No <input type="radio" id="no" name="answer"  value="no"/> <br><br>
+                    </div>
+                  </div>
+                   
+                      
+                </div>
+            
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">MAIN DISHE</label>
+                  <select class="form-control" id="exampleFormControlSelect1" name="mainDish" required>
+                     @foreach($mainDishes as $mainDishe) 
+                        <option value="{{$mainDishe->id}}"   >{{$mainDishe->foodName}}</option>
+                     @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">SIDE DISHE</label>
+                  <select class="form-control" id="exampleFormControlSelect1" name="sideDish" required>
+                     @foreach($sideDishes as $sideDishe) 
+                        <option value="{{$sideDishe->id}}"   >{{$sideDishe->foodName}}</option>
+                     @endforeach
+                  </select>
+                </div>
+                
+                <div class="form-group" id="dessert">
+                  <label for="exampleFormControlInput1">DESSERT</label>
+                  <select class="form-control"  name="dessert">
+                      <option value="No Dessert"  >Choose</option></option>
+                     @foreach($desserts as $dessert) 
+                        <option value="{{$dessert->id}}" >{{$dessert->foodName}}</option>
+                     @endforeach
+                  </select>
+                </div>
+                <div class="justify-content-center text-center">
+                   <button type="submit" class="btn btn-warning">ADD ORDER</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal End -->
+
+    <!-- Modal for Daily report-->
+    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">DAILY REPORT</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <table class="table mt-5 mb-5 table-striped table-dark">
+              <th>Order ID</th>
+              <th>Main Dish Name</th>
+              <th>Side Dish</th>
+              <th>Dessert</th>
+              <th>Order Date</th>
+              <th>Total price</th>
+               <!-- show the orderdetails -->
+              @foreach($dailyReport as $DailyReport)
+                <tr>
+                  <td>{{$DailyReport->id}}</td>
+                  <td>{{$DailyReport->orderedMainDishes}}</td>
+                  <td>{{$DailyReport->OrderedSideDishes}}</td>
+                  <td>{{$DailyReport->OrderedDesserts}}</td>
+                  <td>{{$DailyReport->OrderDate}}</td>
+                  <td>{{$DailyReport->TotalPrice}}</td>
+                </tr>
+              @endforeach
+            </table>
+            <div class="row">
+              <div class="col-12 text-center">
+                 <h4>Total = {{$total}}</h4> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal End -->
+
+  <!-- hide dessert field according to order type -->
+    <script type="text/javascript">
+        $(function () {
+            $("input[name='answer']").click(function () {
+                if ($("#Yes").is(":checked")) {
+                    $("#dessert").show();
+                } else {
+                    $("#dessert").hide();
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function sum(input){
+              var total =  0;
+               total += Number(input);
+               return total;
+               console.log(total)
+        }
+    </script>
+
+   
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-</body>
+
+  </body>
 </html>
